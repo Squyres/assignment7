@@ -21,5 +21,20 @@ public class MeritBankController {
 		return newAct;
 
 	}
+	
+	@GetMapping("/AccountHolders")
+ 	 List<AccountHolder> all() {
+ 	   return accountHolders;
+  	}
+	
+	@GetMapping("/AccountHolders/{id}")
+	  AccountHolder one(@PathVariable Long id) {
 
+	   for(AccountHolder ah : accountHolders){
+	   	if(ah.){
+		    return ah;	
+	   	}
+	   }
+ 	   return null;
+  }
 }
