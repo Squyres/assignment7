@@ -46,5 +46,6 @@ public class MeritBankController {
 	public CheckingAccount addCheckingAccount(@PathVariable int id, @RequestBody @Valid CheckingAccount newAct) throws ExceedsCombinedBalanceLimitException {
 		AccountHolder ach = getAccountHolderByID(id);
 		ach.addCheckingAccount(newAct);
+		return newAct;
 	}
 }
