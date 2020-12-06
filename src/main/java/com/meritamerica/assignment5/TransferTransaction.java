@@ -1,4 +1,4 @@
-package com.meritamerica.assignment4;
+package com.meritamerica.assignment5;
 
 public class TransferTransaction extends Transaction {
 	TransferTransaction(BankAccount sourceAccount, BankAccount targetAccount, double amount) {
