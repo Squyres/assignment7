@@ -1,15 +1,27 @@
 package com.meritamerica.assignment5;
 
-public class AccountHolder implements Comparable<AccountHolder> {
 
+public class AccountHolder implements Comparable<AccountHolder> {
+	@GeneratedValue
+	private int id;
+	@Notblank
 	private String firstName;
 	private String middleName;
+	@NotBlank
 	private String lastName;
+	@NotBlank
 	private String ssn;
 	CheckingAccount[] checkingArray = new CheckingAccount[0];
 	SavingsAccount[] savingsArray = new SavingsAccount[0];
 	CDAccount[] cdAccountArray = new CDAccount[0];
 
+	public AccountHolder() {
+		this.firstName = "";
+		this.middleName = "";
+		this.lastName = "";
+		this.ssn = "";
+	}
+	
 	public AccountHolder(String first, String middle, String last, String ssn) {
 		this.firstName = first;
 		this.middleName = middle;
