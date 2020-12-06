@@ -4,9 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class CheckingAccount extends BankAccount {
+public class CheckingAccount extends BankAccount {
 	
 	public static final double INTEREST_RATE = 0.0001;
+	
+	public CheckingAccount() {
+		this.balance = 0;
+		this.interestRate = INTEREST_RATE;
+	}
 	
 	public CheckingAccount(double openBalance, double interestRate){
 		super(openBalance, interestRate); 

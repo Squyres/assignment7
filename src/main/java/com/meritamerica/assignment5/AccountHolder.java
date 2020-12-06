@@ -1,11 +1,22 @@
 package com.meritamerica.assignment5;
 
+import javax.validation.constraints.NotBlank;
 
 public class AccountHolder implements Comparable<AccountHolder> {
-	@GeneratedValue
-	private int id;
-	@Notblank
+
+	private static int nextId = 0;
+	int id;
+	@NotBlank
 	private String firstName;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	private String middleName;
 	@NotBlank
 	private String lastName;
@@ -16,12 +27,13 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	CDAccount[] cdAccountArray = new CDAccount[0];
 
 	public AccountHolder() {
+		this.id = nextId++;
 		this.firstName = "";
 		this.middleName = "";
 		this.lastName = "";
 		this.ssn = "";
 	}
-	
+
 	public AccountHolder(String first, String middle, String last, String ssn) {
 		this.firstName = first;
 		this.middleName = middle;

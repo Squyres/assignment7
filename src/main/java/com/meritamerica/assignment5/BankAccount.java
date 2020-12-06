@@ -3,11 +3,18 @@ package com.meritamerica.assignment5;
 import java.text.*;
 import java.util.*;
 
+import javax.validation.constraints.NotBlank;
+
 public abstract class BankAccount {
+	@NotBlank
 	double balance;
 	double interestRate;
 	Date accountOpenedOn;
 	long accountNumber;
+	public BankAccount() {
+		this.balance = 0;
+		this.interestRate = 0;
+	}
 
 	public BankAccount(double balance, double interestRate) {
 		this.balance = balance;
