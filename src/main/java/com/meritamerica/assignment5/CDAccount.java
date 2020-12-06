@@ -3,9 +3,12 @@ package com.meritamerica.assignment5;
 import java.text.*;
 import java.util.Date;
 
-class CDAccount extends BankAccount {
+import javax.validation.constraints.NotBlank;
+
+public class CDAccount extends BankAccount {
 
 	CDOffering offering;
+	@NotBlank
 	private int term;
 	Date date;
 

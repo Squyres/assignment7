@@ -42,25 +42,61 @@ public class MeritBankController {
 		}
 		return actSearch;
 	}
+
 	@PostMapping("/AccountHolders/{id}/CheckingAccounts")
-	public CheckingAccount addCheckingAccount(@PathVariable int id, @RequestBody @Valid CheckingAccount newAct) throws ExceedsCombinedBalanceLimitException {
-		AccountHolder ach = getAccountHolderByID(id);
-		ach.addCheckingAccount(newAct);
+	public CheckingAccount addCheckingAccount(@PathVariable int id, @RequestBody @Valid CheckingAccount newAct)
+			throws ExceedsCombinedBalanceLimitException {
+		AccountHolder act = getAccountHolderByID(id);
+		act.addCheckingAccount(newAct);
 		return newAct;
 	}
-	
-List<CDOffering> cdoffering = new ArrayList<CDOffering>();
-	
-	@PostMapping(value = "/CDOffering")
-	public CDOffering addCDoffering(@RequestBody CDOffering newACT) {
-		cdoffering.add(newACT);
-		return newACT;
-		
+
+	@GetMapping("/AccountHolders/{id}/CheckingAccounts")
+	public List<CheckingAccount> getCheckingAccountsByID(@PathVariable int id) {
+		AccountHolder act = getAccountHolderByID(id);
+		return Arrays.asList(act.getCheckingAccounts());
 	}
-	
-	@GetMapping("/CDOffering")
-	List<CDOffering>all(){
-		return cdoffering;
+
+	@PostMapping("/AccountHolders/{id}/SavingsAccounts")
+	public SavingsAccount addSavingsAccount(@PathVariable int id, @RequestBody @Valid SavingsAccount newAct)
+			throws ExceedsCombinedBalanceLimitException {
+		AccountHolder act = getAccountHolderByID(id);
+		act.addSavingsAccount(newAct);
+		return newAct;
 	}
-	
+
+	@GetMapping("/AccountHolders/{id}/SavingsAccounts")
+	public List<SavingsAccount> getSavingsAccountsByID(@PathVariable int id) {
+		AccountHolder act = getAccountHolderByID(id);
+		return Arrays.asList(act.getSavingsAccounts());
+	}
+
+	@PostMapping("/AccountHolders/{id}/CDAccounts")
+	public CDAccount addCDAccount(@PathVariable int id, @RequestBody @Valid CDAccount newAct)
+			throws ExceedsCombinedBalanceLimitException {
+		AccountHolder act = getAccountHolderByID(id);
+		act.addCDAccount(newAct);
+		return newAct;
+	}
+
+	@GetMapping("/AccountHolders/{id}/CDAccounts")
+	public List<CDAccount> getCDAccountsByID(@PathVariable int id) {
+		AccountHolder act = getAccountHolderByID(id);
+		return Arrays.asList(act.getCDAccounts());
+	}
+
+	List<CDOffering> cdOfferings = new ArrayList<CDOffering>();
+
+	@PostMapping(value = "/CDOfferings")
+	public CDOffering addCDOffering(@RequestBody @Valid CDOffering newOffer) {
+		cdOfferings.add(newOffer);
+		return newOffer;
+
+	}
+
+	@GetMapping("/CDOfferings")
+	List<CDOffering> getCDOfferings() {
+		return cdOfferings;
+	}
+
 }

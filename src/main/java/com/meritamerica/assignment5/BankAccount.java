@@ -4,13 +4,17 @@ import java.text.*;
 import java.util.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public abstract class BankAccount {
-	@NotBlank
+	@NotNull
 	double balance;
+	@NotNull
 	double interestRate;
 	Date accountOpenedOn;
 	long accountNumber;
+
 	public BankAccount() {
 		this.balance = 0;
 		this.interestRate = 0;
@@ -112,7 +116,7 @@ public abstract class BankAccount {
 	}
 
 	public void addTransaction(Transaction transaction) {
-		
+
 	}
 
 	public List<Transaction> getTransactions() {

@@ -4,8 +4,8 @@ import javax.validation.constraints.NotBlank;
 
 public class AccountHolder implements Comparable<AccountHolder> {
 
-	private static int nextId = 0;
-	int id;
+	private static int nextId = 1;
+	private int id;
 	@NotBlank
 	private String firstName;
 
@@ -35,6 +35,7 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	}
 
 	public AccountHolder(String first, String middle, String last, String ssn) {
+		this.id = nextId++;
 		this.firstName = first;
 		this.middleName = middle;
 		this.lastName = last;

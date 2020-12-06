@@ -13,6 +13,7 @@
 	<artifactId>assignment5</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>assignment5</name>
+	<packaging>jar</packaging>
 	<description>Merit America Assignment 5</description>
 
 	<properties>
