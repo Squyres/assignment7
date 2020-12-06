@@ -48,4 +48,19 @@ public class MeritBankController {
 		ach.addCheckingAccount(newAct);
 		return newAct;
 	}
+	
+List<CDOffering> cdoffering = new ArrayList<CDOffering>();
+	
+	@PostMapping(value = "/CDOffering")
+	public CDOffering addCDoffering(@RequestBody CDOffering newACT) {
+		cdoffering.add(newACT);
+		return newACT;
+		
+	}
+	
+	@GetMapping("/CDOffering")
+	List<CDOffering>all(){
+		return cdoffering;
+	}
+	
 }
