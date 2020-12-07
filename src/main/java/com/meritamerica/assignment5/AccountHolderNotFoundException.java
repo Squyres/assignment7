@@ -1,8 +1,16 @@
 package com.meritamerica.assignment5;
-class AccountHolderNotFoundException extends RuntimeException {
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  AccountHolderNotFoundException(Long id) {
-    super("Could not find employee " + id);
-  }
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class AccountHolderNotFoundException extends Exception {
+
+	public AccountHolderNotFoundException(int id) {
+		super("Could not find employee " + id);
+	}
+
+	public AccountHolderNotFoundException() {
+		super("Could not find employee");
+	}
 }

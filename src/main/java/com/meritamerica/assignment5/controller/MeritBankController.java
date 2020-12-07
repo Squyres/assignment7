@@ -21,13 +21,12 @@ public class MeritBankController {
 
 	@PostMapping(value = "/AccountHolders")
 	@ResponseStatus(HttpStatus.CREATED)
-	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct)throws AccountHolderNotFoundException {
+	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct)
+			throws AccountHolderNotFoundException {
 		accountHolders.add(newAct);
-		if(newAct.getFirstName() == "" ||newAct.getFirstName() == null||
-		  newAct.getLastName() == "" ||newAct.getLastName() == null||
-		  newAct.getSSN() == "" ||newAct.getSNN() == null
-		  ){
-			throw new AccountHolderNotFoundException(newAct.getId() + "");
+		if (newAct.getFirstName() == "" || newAct.getFirstName() == null || newAct.getLastName() == ""
+				|| newAct.getLastName() == null || newAct.getSSN() == "" || newAct.getSSN() == null) {
+			throw new AccountHolderNotFoundException();
 		}
 		return newAct;
 
@@ -39,27 +38,29 @@ public class MeritBankController {
 	}
 
 	@GetMapping("/AccountHolders/{id}")
-	public AccountHolder getAccountHolderByID(@PathVariable int id) throws AccountHolderIdNotFoundException{
+	public AccountHolder getAccountHolderByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder actSearch = null;
 		for (AccountHolder ach : accountHolders) {
 			if (ach.getId() == id) {
 				actSearch = ach;
 			}
 		}
-		if(actSearch == null){
+		if (actSearch == null) {
 			throw new AccountHolderIdNotFoundException(id);
 		}
 		return actSearch;
 	}
 
 	@PostMapping("/AccountHolders/{id}/CheckingAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
 	public CheckingAccount addCheckingAccount(@PathVariable int id, @RequestBody @Valid CheckingAccount newAct)
-			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException, AccountHolderNotFoundException{
+			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException,
+			AccountHolderNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
-		if(newAct == null){
+		if (newAct == null) {
 			throw new AccountHolderIdNotFoundException(id);
 		}
-		if(newAct.getBalance() < 0){
+		if (newAct.getBalance() < 0) {
 			throw new AccountHolderNotFoundException(id);
 		}
 		act.addCheckingAccount(newAct);
@@ -67,36 +68,38 @@ public class MeritBankController {
 	}
 
 	@GetMapping("/AccountHolders/{id}/CheckingAccounts")
-	public List<CheckingAccount> getCheckingAccountsByID(@PathVariable int id) {
+	public List<CheckingAccount> getCheckingAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
-		
+
 		return Arrays.asList(act.getCheckingAccounts());
 	}
 
 	@PostMapping("/AccountHolders/{id}/SavingsAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
 	public SavingsAccount addSavingsAccount(@PathVariable int id, @RequestBody @Valid SavingsAccount newAct)
-			throws ExceedsCombinedBalanceLimitException {
+			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
 		act.addSavingsAccount(newAct);
 		return newAct;
 	}
 
 	@GetMapping("/AccountHolders/{id}/SavingsAccounts")
-	public List<SavingsAccount> getSavingsAccountsByID(@PathVariable int id) {
+	public List<SavingsAccount> getSavingsAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
 		return Arrays.asList(act.getSavingsAccounts());
 	}
 
 	@PostMapping("/AccountHolders/{id}/CDAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
 	public CDAccount addCDAccount(@PathVariable int id, @RequestBody @Valid CDAccount newAct)
-			throws ExceedsCombinedBalanceLimitException {
+			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
 		act.addCDAccount(newAct);
 		return newAct;
 	}
 
 	@GetMapping("/AccountHolders/{id}/CDAccounts")
-	public List<CDAccount> getCDAccountsByID(@PathVariable int id) {
+	public List<CDAccount> getCDAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
 		return Arrays.asList(act.getCDAccounts());
 	}
@@ -104,6 +107,7 @@ public class MeritBankController {
 	List<CDOffering> cdOfferings = new ArrayList<CDOffering>();
 
 	@PostMapping(value = "/CDOfferings")
+	@ResponseStatus(HttpStatus.CREATED)
 	public CDOffering addCDOffering(@RequestBody @Valid CDOffering newOffer) {
 		cdOfferings.add(newOffer);
 		return newOffer;
