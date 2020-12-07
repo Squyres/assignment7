@@ -3,7 +3,7 @@ package com.meritamerica.assignment5;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class AccountHolderNotFoundException extends Exception {
 
 	public AccountHolderNotFoundException(int id) {

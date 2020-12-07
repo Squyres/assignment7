@@ -21,15 +21,9 @@ public class MeritBankController {
 
 	@PostMapping(value = "/AccountHolders")
 	@ResponseStatus(HttpStatus.CREATED)
-	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct)
-			throws AccountHolderNotFoundException {
+	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct) {
 		accountHolders.add(newAct);
-		if (newAct.getFirstName() == "" || newAct.getFirstName() == null || newAct.getLastName() == ""
-				|| newAct.getLastName() == null || newAct.getSSN() == "" || newAct.getSSN() == null) {
-			throw new AccountHolderNotFoundException();
-		}
 		return newAct;
-
 	}
 
 	@GetMapping("/AccountHolders")
@@ -57,8 +51,12 @@ public class MeritBankController {
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException,
 			AccountHolderNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
-		 if(){
-		 }
+		if (newAct.getBalance() < 0) {
+			throw new ExceedsCombinedBalanceLimitException();
+		}
+		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
+			throw new ExceedsCombinedBalanceLimitException();
+		}
 		act.addCheckingAccount(newAct);
 		return newAct;
 	}
@@ -77,6 +75,12 @@ public class MeritBankController {
 	public SavingsAccount addSavingsAccount(@PathVariable int id, @RequestBody @Valid SavingsAccount newAct)
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
+		if (newAct.getBalance() < 0) {
+			throw new ExceedsCombinedBalanceLimitException();
+		}
+		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
+			throw new ExceedsCombinedBalanceLimitException();
+		}
 		act.addSavingsAccount(newAct);
 		return newAct;
 	}
@@ -84,6 +88,9 @@ public class MeritBankController {
 	@GetMapping("/AccountHolders/{id}/SavingsAccounts")
 	public List<SavingsAccount> getSavingsAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
+		if (act == null) {
+			throw new AccountHolderIdNotFoundException(id);
+		}
 		return Arrays.asList(act.getSavingsAccounts());
 	}
 
