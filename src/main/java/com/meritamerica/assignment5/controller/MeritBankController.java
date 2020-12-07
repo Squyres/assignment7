@@ -21,8 +21,11 @@ public class MeritBankController {
 
 	@PostMapping(value = "/AccountHolders")
 	@ResponseStatus(HttpStatus.CREATED)
-	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct) {
+	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct).orElseThrow(() -> new AccountHolderNotFoundException(id)) {
 		accountHolders.add(newAct);
+		if(newAct.){
+			
+		}
 		return newAct;
 
 	}
@@ -33,7 +36,7 @@ public class MeritBankController {
 	}
 
 	@GetMapping("/AccountHolders/{id}")
-	public AccountHolder getAccountHolderByID(@PathVariable int id) {
+	public AccountHolder getAccountHolderByID(@PathVariable int id).orElseThrow(() -> new AccountHolderIdNotFoundException (id)) {
 		AccountHolder actSearch = null;
 		for (AccountHolder ach : accountHolders) {
 			if (ach.getId() == id) {
