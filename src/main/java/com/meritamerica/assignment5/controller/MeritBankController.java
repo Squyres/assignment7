@@ -57,12 +57,8 @@ public class MeritBankController {
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException,
 			AccountHolderNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
-		if (newAct == null) {
-			throw new AccountHolderIdNotFoundException(id);
-		}
-		if (newAct.getBalance() < 0) {
-			throw new AccountHolderNotFoundException(id);
-		}
+		 if(){
+		 }
 		act.addCheckingAccount(newAct);
 		return newAct;
 	}
@@ -70,7 +66,9 @@ public class MeritBankController {
 	@GetMapping("/AccountHolders/{id}/CheckingAccounts")
 	public List<CheckingAccount> getCheckingAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
-
+		if (act == null) {
+			throw new AccountHolderIdNotFoundException(id);
+		}
 		return Arrays.asList(act.getCheckingAccounts());
 	}
 
