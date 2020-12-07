@@ -21,10 +21,13 @@ public class MeritBankController {
 
 	@PostMapping(value = "/AccountHolders")
 	@ResponseStatus(HttpStatus.CREATED)
-	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct).orElseThrow(() -> new AccountHolderNotFoundException(id)) {
+	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct)throws AccountHolderNotFoundException {
 		accountHolders.add(newAct);
-		if(newAct.){
-			
+		if(newAct.getFirstName() == "" ||newAct.getFirstName() == null||
+		  newAct.getLastName() == "" ||newAct.getLastName() == null||
+		  newAct.getSSN() == "" ||newAct.getSNN() == null
+		  ){
+			throw new AccountHolderNotFoundException(newAct.getId() + "");
 		}
 		return newAct;
 
@@ -36,20 +39,29 @@ public class MeritBankController {
 	}
 
 	@GetMapping("/AccountHolders/{id}")
-	public AccountHolder getAccountHolderByID(@PathVariable int id).orElseThrow(() -> new AccountHolderIdNotFoundException (id)) {
+	public AccountHolder getAccountHolderByID(@PathVariable int id) throws AccountHolderIdNotFoundException{
 		AccountHolder actSearch = null;
 		for (AccountHolder ach : accountHolders) {
 			if (ach.getId() == id) {
 				actSearch = ach;
 			}
 		}
+		if(actSearch == null){
+			throw new AccountHolderIdNotFoundException(id);
+		}
 		return actSearch;
 	}
 
 	@PostMapping("/AccountHolders/{id}/CheckingAccounts")
 	public CheckingAccount addCheckingAccount(@PathVariable int id, @RequestBody @Valid CheckingAccount newAct)
-			throws ExceedsCombinedBalanceLimitException {
+			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException, AccountHolderNotFoundException{
 		AccountHolder act = getAccountHolderByID(id);
+		if(newAct == null){
+			throw new AccountHolderIdNotFoundException(id);
+		}
+		if(newAct.getBalance() < 0){
+			throw new AccountHolderNotFoundException(id);
+		}
 		act.addCheckingAccount(newAct);
 		return newAct;
 	}
@@ -57,6 +69,7 @@ public class MeritBankController {
 	@GetMapping("/AccountHolders/{id}/CheckingAccounts")
 	public List<CheckingAccount> getCheckingAccountsByID(@PathVariable int id) {
 		AccountHolder act = getAccountHolderByID(id);
+		
 		return Arrays.asList(act.getCheckingAccounts());
 	}
 
