@@ -3,15 +3,19 @@ package com.meritamerica.assignment5;
 import java.text.*;
 import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Min;
 
 public class CDAccount extends BankAccount {
 
 	CDOffering offering;
-	@NotBlank
+	@Min(value = 1)
 	private int term;
 	Date date;
 
+	public CDAccount() {
+		this.balance = 0;
+	}
+	
 	public CDAccount(CDOffering offering, double openBalance) {
 		super(openBalance, offering.getInterestRate());
 		this.offering = offering;
@@ -25,6 +29,10 @@ public class CDAccount extends BankAccount {
 
 	public int getTerm() {
 		return this.term;
+	}
+	
+	public void setTerm(int term) {
+		this.term = term;
 	}
 
 	public Date getStartDate() {

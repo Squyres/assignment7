@@ -51,9 +51,6 @@ public class MeritBankController {
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException,
 			AccountHolderNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
-		if (newAct.getBalance() < 0) {
-			throw new ExceedsCombinedBalanceLimitException();
-		}
 		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
 			throw new ExceedsCombinedBalanceLimitException();
 		}
@@ -75,9 +72,6 @@ public class MeritBankController {
 	public SavingsAccount addSavingsAccount(@PathVariable int id, @RequestBody @Valid SavingsAccount newAct)
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
-		if (newAct.getBalance() < 0) {
-			throw new ExceedsCombinedBalanceLimitException();
-		}
 		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
 			throw new ExceedsCombinedBalanceLimitException();
 		}

@@ -8,6 +8,11 @@ public class SavingsAccount extends BankAccount {
 
 	public static final double INTEREST_RATE = 0.01;
 
+	public SavingsAccount() {
+		this.balance = 0;
+		this.interestRate = INTEREST_RATE;
+	}
+
 	public SavingsAccount(double openBalance, double interestRate) {
 		super(openBalance, interestRate);
 	}

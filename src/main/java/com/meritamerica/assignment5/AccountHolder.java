@@ -8,15 +8,6 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	private int id;
 	@NotBlank
 	private String firstName;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	private String middleName;
 	@NotBlank
 	private String lastName;
@@ -40,6 +31,14 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		this.middleName = middle;
 		this.lastName = last;
 		this.ssn = ssn;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public CheckingAccount addCheckingAccount(double openBalance) throws ExceedsCombinedBalanceLimitException {

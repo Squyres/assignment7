@@ -3,14 +3,15 @@ package com.meritamerica.assignment5;
 import java.text.*;
 import java.util.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 
 public abstract class BankAccount {
-	@NotNull
+	@Min(value = 0)
 	double balance;
-	@NotNull
+	@DecimalMin(value = "0.0", inclusive = false, message = "Interest rate must be > 0")
+	@DecimalMax(value = "1.0", inclusive = false, message = "Interest rate must be < 1")
 	double interestRate;
 	Date accountOpenedOn;
 	long accountNumber;
