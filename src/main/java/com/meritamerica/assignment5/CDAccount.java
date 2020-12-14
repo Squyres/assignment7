@@ -35,7 +35,9 @@ public class CDAccount extends BankAccount {
 		super(accountNumber, balance, interestRate, accountOpenedOn);
 		this.term = term;
 	}
-
+	public void addAccountHolder(AccountHolder ah){
+		this.ah = ah;
+	}
 	public int getTerm() {
 		return this.term;
 	}
