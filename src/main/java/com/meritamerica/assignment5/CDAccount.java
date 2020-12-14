@@ -3,10 +3,14 @@ package com.meritamerica.assignment5;
 import java.text.*;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
 @Entity
-@Table(name="CDAccount")
+@Table(name = "CDAccount")
 public class CDAccount extends BankAccount {
 
 	CDOffering offering;
@@ -14,12 +18,13 @@ public class CDAccount extends BankAccount {
 	private int term;
 	Date date;
 	@ManyToOne
-   	 @JoinColumn(name="user_id", nullable=false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private AccountHolder ah;
+
 	public CDAccount() {
 		this.balance = 0;
 	}
-	
+
 	public CDAccount(CDOffering offering, double openBalance) {
 		super(openBalance, offering.getInterestRate());
 		this.offering = offering;
@@ -34,7 +39,7 @@ public class CDAccount extends BankAccount {
 	public int getTerm() {
 		return this.term;
 	}
-	
+
 	public void setTerm(int term) {
 		this.term = term;
 	}

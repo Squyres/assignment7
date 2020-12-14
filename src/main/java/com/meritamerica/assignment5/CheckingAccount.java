@@ -4,15 +4,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 @Entity
-@Table(name="CheckingAccount")
+@Table(name = "CheckingAccount")
 public class CheckingAccount extends BankAccount {
 
 	public static final double INTEREST_RATE = 0.0001;
 	@ManyToOne
-   	 @JoinColumn(name="user_id", nullable=false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private AccountHolder ah;
-   	 private UserAccount cart;
+	private UserAccount cart;
+
 	public CheckingAccount() {
 		this.balance = 0;
 		this.interestRate = INTEREST_RATE;
