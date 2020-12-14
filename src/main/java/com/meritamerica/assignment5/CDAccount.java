@@ -5,13 +5,17 @@ import java.util.Date;
 
 import javax.validation.constraints.Min;
 
+@Entity
+@Table(name="CDAccount")
 public class CDAccount extends BankAccount {
 
 	CDOffering offering;
 	@Min(value = 1)
 	private int term;
 	Date date;
-
+	@ManyToOne
+   	 @JoinColumn(name="user_id", nullable=false)
+	private AccountHolder ah;
 	public CDAccount() {
 		this.balance = 0;
 	}
