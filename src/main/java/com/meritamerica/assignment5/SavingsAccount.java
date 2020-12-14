@@ -27,7 +27,9 @@ public class SavingsAccount extends BankAccount {
 	public SavingsAccount(double openBalance, double interestRate) {
 		super(openBalance, interestRate);
 	}
-
+	public void addAccountHolder(AccountHolder ah){
+		this.ah = ah;
+	}
 	public SavingsAccount(long accountNumber, double openBalance, double interestRate, Date accountOpenedOn) {
 		super(accountNumber, openBalance, interestRate, accountOpenedOn);
 	}
