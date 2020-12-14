@@ -16,7 +16,7 @@ public class SavingsAccount extends BankAccount {
 	public static final double INTEREST_RATE = 0.01;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "accountholder_id", nullable = false)
 	private AccountHolder ah;
 
 	public SavingsAccount() {
