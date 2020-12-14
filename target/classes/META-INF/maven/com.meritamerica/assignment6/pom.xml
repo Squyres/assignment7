@@ -10,11 +10,11 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.meritamerica</groupId>
-	<artifactId>assignment5</artifactId>
+	<artifactId>assignment6</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>assignment5</name>
+	<name>assignment6</name>
 	<packaging>jar</packaging>
-	<description>Merit America Assignment 5</description>
+	<description>Merit America Assignment 6</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
