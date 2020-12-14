@@ -41,6 +41,9 @@ public class CheckingAccount extends BankAccount {
 		}
 		return false;
 	}
+	public void addAccountHolder(AccountHolder ah){
+		this.ah = ah;
+	}
 
 	public boolean deposit(double amount) {
 		if (amount > 0) {
