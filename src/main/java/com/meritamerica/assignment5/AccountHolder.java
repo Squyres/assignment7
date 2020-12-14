@@ -1,10 +1,13 @@
 package com.meritamerica.assignment5;
 
 import javax.validation.constraints.NotBlank;
-
+@Entity
+@Table(name="accountholder")
 public class AccountHolder implements Comparable<AccountHolder> {
 
 	private static int nextId = 1;
+	
+	@Column(unique = true)
 	private int id;
 	@NotBlank
 	private String firstName;
@@ -13,8 +16,11 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	private String lastName;
 	@NotBlank
 	private String ssn;
+	@OneToMany(mappedBy = "accountholder")
 	CheckingAccount[] checkingArray = new CheckingAccount[0];
+	@OneToMany(mappedBy = "accountholder")
 	SavingsAccount[] savingsArray = new SavingsAccount[0];
+	@OneToMany(mappedBy = "accountholder")
 	CDAccount[] cdAccountArray = new CDAccount[0];
 
 	public AccountHolder() {
