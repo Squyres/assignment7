@@ -17,7 +17,6 @@ public class CheckingAccount extends BankAccount {
 	@ManyToOne
 	@JoinColumn(name = "accountholder_id", nullable = false)
 	private AccountHolder ah;
-	private UserAccount cart;
 
 	public CheckingAccount() {
 		this.balance = 0;
@@ -41,7 +40,8 @@ public class CheckingAccount extends BankAccount {
 		}
 		return false;
 	}
-	public void addAccountHolder(AccountHolder ah){
+
+	public void addAccountHolder(AccountHolder ah) {
 		this.ah = ah;
 	}
 
