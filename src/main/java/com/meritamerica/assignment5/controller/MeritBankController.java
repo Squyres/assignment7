@@ -55,6 +55,7 @@ public class MeritBankController {
 			throw new ExceedsCombinedBalanceLimitException();
 		}
 		act.addCheckingAccount(newAct);
+		newAct.addAccountHolder(act);
 		return newAct;
 	}
 
@@ -76,6 +77,7 @@ public class MeritBankController {
 			throw new ExceedsCombinedBalanceLimitException();
 		}
 		act.addSavingsAccount(newAct);
+		newAct.addAccountHolder(act);
 		return newAct;
 	}
 
@@ -94,6 +96,7 @@ public class MeritBankController {
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
 		AccountHolder act = getAccountHolderByID(id);
 		act.addCDAccount(newAct);
+		newAct.addAccountHolder(act);
 		return newAct;
 	}
 
