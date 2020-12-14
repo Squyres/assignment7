@@ -18,7 +18,7 @@ public class CDAccount extends BankAccount {
 	private int term;
 	Date date;
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "accountholder_id", nullable = false)
 	private AccountHolder ah;
 
 	public CDAccount() {
