@@ -11,7 +11,7 @@ public class AccountHolder implements Comparable<AccountHolder> {
 
 	private static int nextId = 1;
 	
-	@Column(unique = true)
+	@Column(name = "id")
 	private int id;
 	@NotBlank
 	private String firstName;
