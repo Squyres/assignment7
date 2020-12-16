@@ -10,6 +10,7 @@ public class CDOffering {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private int term;
+
 	private double interestRate;
 
 	public CDOffering(int term, double interestRate) {
@@ -17,19 +18,12 @@ public class CDOffering {
 		this.interestRate = interestRate;
 	}
 
-	public int getTerm() {
-		return term;
-	}
-
 	public double getInterestRate() {
 		return interestRate;
 	}
 
-	static CDOffering readFromString(String cdOfferingDataString) {
-		String[] cd = cdOfferingDataString.split(",");
-		CDOffering newCD = new CDOffering(Integer.valueOf(cd[0]), Double.valueOf(cd[1]));
-		return newCD;
-
+	public int getTerm() {
+		return term;
 	}
 
 	String writeToString() {

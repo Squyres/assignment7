@@ -1,7 +1,6 @@
 package com.meritamerica.assignment6.models;
 
-import java.text.*;
-import java.util.*;
+import java.util.Date;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -53,6 +52,22 @@ public abstract class BankAccount {
 		this.accountOpenedOn = accountOpenedOn;
 	}
 
+	public boolean deposit(double amount) throws ExceedsFraudSuspicionLimitException {
+		if (amount <= 0) {
+			System.out.println("Please deposit sufficient amount");
+			return false;
+		} else {
+			balance += amount;
+			System.out.println("Transation Complete");
+			return true;
+		}
+	}
+
+	public double futureValue(int years) {
+		double futureVal = this.balance * Math.pow(1 + getInterestRate(), years);
+		return futureVal;
+	}
+
 	public long getAccountNumber() {
 		return accountNumber;
 	}
@@ -77,22 +92,6 @@ public abstract class BankAccount {
 			return true;
 		}
 		return false;
-	}
-
-	public boolean deposit(double amount) throws ExceedsFraudSuspicionLimitException {
-		if (amount <= 0) {
-			System.out.println("Please deposit sufficient amount");
-			return false;
-		} else {
-			balance += amount;
-			System.out.println("Transation Complete");
-			return true;
-		}
-	}
-
-	public double futureValue(int years) {
-		double futureVal = this.balance * Math.pow(1 + getInterestRate(), years);
-		return futureVal;
 	}
 
 }
