@@ -24,6 +24,7 @@ public class CDAccount extends BankAccount {
 
 	public CDAccount() {
 		this.balance = 0;
+		this.interestRate = 0.01;
 	}
 
 	public CDAccount(CDOffering offering, double openBalance) {

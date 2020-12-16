@@ -20,19 +20,15 @@ public class AccountHolderContactDetails {
 	@OneToOne(cascade = CascadeType.ALL)
 	private AccountHolder accountHolder;
 
-	public AccountHolder getAccountHolder() {
-		return accountHolder;
-	}
-
-	public void setAccountHolder(AccountHolder accountHolder) {
-		this.accountHolder = accountHolder;
-	}
-
 	private String phoneNumber;
 
 	private String email;
 
 	private String address;
+
+	public AccountHolder getAccountHolder() {
+		return accountHolder;
+	}
 
 	public String getAddress() {
 		return address;
@@ -44,6 +40,10 @@ public class AccountHolderContactDetails {
 
 	public String getPhoneNumber() {
 		return phoneNumber;
+	}
+
+	public void setAccountHolder(AccountHolder accountHolder) {
+		this.accountHolder = accountHolder;
 	}
 
 	public void setAddress(String address) {

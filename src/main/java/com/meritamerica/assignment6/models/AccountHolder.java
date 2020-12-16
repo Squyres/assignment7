@@ -84,6 +84,10 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		}
 	}
 
+	public AccountHolderContactDetails getAccountHolderContactDetails() {
+		return accountHolderContactDetails;
+	}
+
 	public List<CDAccount> getCDAccounts() {
 		return cdAccountArray;
 	}
@@ -157,6 +161,10 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		return ssn;
 	}
 
+	public void setAccountHolderContactDetails(AccountHolderContactDetails accountHolderContactDetails) {
+		this.accountHolderContactDetails = accountHolderContactDetails;
+	}
+
 	public void setFirstName(String first) {
 		this.firstName = first;
 	}
@@ -180,14 +188,6 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	@Override
 	public String toString() {
 		return "Combined Balance for Account Holder" + this.getCombinedBalance();
-	}
-
-	public AccountHolderContactDetails getAccountHolderContactDetails() {
-		return accountHolderContactDetails;
-	}
-
-	public void setAccountHolderContactDetails(AccountHolderContactDetails accountHolderContactDetails) {
-		this.accountHolderContactDetails = accountHolderContactDetails;
 	}
 
 }

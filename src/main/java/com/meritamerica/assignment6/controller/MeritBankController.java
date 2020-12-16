@@ -45,7 +45,7 @@ public class MeritBankController {
 	@Autowired
 	private SavingsAccountRepository savingsAccountRepository;
 
-	@PostMapping(value = "/AccountHolders")
+	@PostMapping("/AccountHolders")
 	@ResponseStatus(HttpStatus.CREATED)
 	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct) {
 		accountHolderRepository.save(newAct);
@@ -62,7 +62,7 @@ public class MeritBankController {
 		return newAct;
 	}
 
-	@PostMapping(value = "/CDOfferings")
+	@PostMapping("/CDOfferings")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CDOffering addCDOffering(@RequestBody @Valid CDOffering newOffer) {
 		cdOfferingRepository.save(newOffer);
@@ -82,6 +82,16 @@ public class MeritBankController {
 		act.addCheckingAccount(newAct);
 		checkingAccountRepository.save(newAct);
 		return newAct;
+	}
+
+	@PostMapping("/AccountHolders/{id}/ContactDetails")
+	@ResponseStatus(HttpStatus.CREATED)
+	public AccountHolderContactDetails addContactDetails(@PathVariable int id,
+			@RequestBody AccountHolderContactDetails contactDetails) {
+		AccountHolder act = accountHolderRepository.findById(id);
+		act.setAccountHolderContactDetails(contactDetails);
+		accountHolderContactDetailsRepository.save(contactDetails);
+		return contactDetails;
 	}
 
 	@PostMapping("/AccountHolders/{id}/SavingsAccounts")
@@ -127,16 +137,7 @@ public class MeritBankController {
 		return checkingAccountRepository.findByAccountHolder(act.getId());
 	}
 
-	@GetMapping("/AccountHolders/{id}/SavingsAccounts")
-	public List<SavingsAccount> getSavingsAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
-		AccountHolder act = accountHolderRepository.findById(id);
-		if (act == null) {
-			throw new AccountHolderIdNotFoundException(id);
-		}
-		return savingsAccountRepository.findByAccountHolder(act.getId());
-	}
-
-	@GetMapping(value = "/AccountHolders/{id}/ContactDetails")
+	@GetMapping("/AccountHolders/{id}/ContactDetails")
 	public AccountHolderContactDetails getContactDetails(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder act = accountHolderRepository.findById(id);
 		if (act == null) {
@@ -145,14 +146,13 @@ public class MeritBankController {
 		return accountHolderContactDetailsRepository.findByAccountHolder(act.getId());
 	}
 
-	@PostMapping(value = "/AccountHolders/{id}/ContactDetails")
-	@ResponseStatus(HttpStatus.CREATED)
-	public AccountHolderContactDetails addContactDetails(@PathVariable int id,
-			@RequestBody AccountHolderContactDetails contactDetails) {
+	@GetMapping("/AccountHolders/{id}/SavingsAccounts")
+	public List<SavingsAccount> getSavingsAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
 		AccountHolder act = accountHolderRepository.findById(id);
-		act.setAccountHolderContactDetails(contactDetails);
-		accountHolderContactDetailsRepository.save(contactDetails);
-		return contactDetails;
+		if (act == null) {
+			throw new AccountHolderIdNotFoundException(id);
+		}
+		return savingsAccountRepository.findByAccountHolder(act.getId());
 	}
 
 }
