@@ -10,6 +10,9 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
+
+import com.meritamerica.assignment6.exceptions.ExceedsFraudSuspicionLimitException;
+
 @MappedSuperclass
 public abstract class BankAccount {
 
@@ -90,47 +93,6 @@ public abstract class BankAccount {
 	public double futureValue(int years) {
 		double futureVal = this.balance * Math.pow(1 + getInterestRate(), years);
 		return futureVal;
-	}
-
-	public String writeToString() {
-		StringBuilder accountData = new StringBuilder();
-		accountData.append(accountNumber).append(",");
-		accountData.append(accountOpenedOn).append(",");
-		accountData.append(balance).append(",");
-		accountData.append(interestRate);
-		return accountData.toString();
-	}
-
-	public static BankAccount readFromString(String accountData) throws ParseException, NumberFormatException {
-		try {
-			String[] holding = accountData.split(",");
-			SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
-			Long accountNumber = Long.parseLong(holding[0]);
-			double balance = Double.parseDouble(holding[1]);
-			double interestRate = Double.parseDouble(holding[2]);
-			Date accountOpenedOn = date.parse(holding[3]);
-			if (interestRate == 0.01) {
-				return new SavingsAccount(accountNumber, balance, interestRate, accountOpenedOn);
-			} else
-				return new CheckingAccount(accountNumber, balance, interestRate, accountOpenedOn);
-
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	public void addTransaction(Transaction transaction) {
-
-	}
-
-	public List<Transaction> getTransactions() {
-		List<Transaction> newL = new ArrayList<Transaction>();
-		return newL;
 	}
 
 }

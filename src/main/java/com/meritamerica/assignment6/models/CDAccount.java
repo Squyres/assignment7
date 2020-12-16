@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
+import com.meritamerica.assignment6.exceptions.ExceedsFraudSuspicionLimitException;
+
 @Entity
 @Table(name = "CDAccount")
 public class CDAccount extends BankAccount {

@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import com.meritamerica.assignment6.exceptions.ExceedsCombinedBalanceLimitException;
+
 @Entity
 @Table(name = "accountholder")
 public class AccountHolder implements Comparable<AccountHolder> {
