@@ -1,23 +1,28 @@
 package com.meritamerica.assignment6.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.meritamerica.assignment6.exceptions.ExceedsCombinedBalanceLimitException;
-
 @Entity
-@Table(name = "accountholder")
+@Table(name = "accountholders")
 public class AccountHolder implements Comparable<AccountHolder> {
 
 	private static int nextId = 1;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "user_id")
 	private int id;
 	@NotBlank
 	private String firstName;
@@ -26,13 +31,15 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	private String lastName;
 	@NotBlank
 	private String ssn;
-	@OneToMany(mappedBy = "accountholder")
-	CheckingAccount[] checkingArray = new CheckingAccount[0];
-	@OneToMany(mappedBy = "accountholder")
-	SavingsAccount[] savingsArray = new SavingsAccount[0];
-
-	@OneToMany(mappedBy = "accountholder")
-	CDAccount[] cdAccountArray = new CDAccount[0];
+	@OneToMany(cascade = CascadeType.ALL)
+	List<CheckingAccount> checkingArray;
+	@OneToMany(cascade = CascadeType.ALL)
+	List<SavingsAccount> savingsArray;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private AccountHolderContactDetails accountHolderContactDetails;
+	@OneToMany(cascade = CascadeType.ALL)
+	List<CDAccount> cdAccountArray;
 
 	public AccountHolder() {
 		this.id = nextId++;
@@ -50,90 +57,31 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		this.ssn = ssn;
 	}
 
-	public CDAccount addCDAccount(CDAccount cdAccount) {
-		CDAccount[] newCDArray = new CDAccount[cdAccountArray.length + 1];
-		for (int i = 0; i < newCDArray.length - 1; i++) {
-			newCDArray[i] = cdAccountArray[i];
+	public boolean addCDAccount(CDAccount cdAccount) {
+		if (cdAccount == null) {
+			return false;
 		}
-		cdAccountArray = newCDArray;
-		cdAccountArray[cdAccountArray.length - 1] = cdAccount;
-		return cdAccount;
+		cdAccountArray.add(cdAccount);
+		cdAccount.setAccountHolder(this.id);
+		return true;
 	}
 
-	public CDAccount addCDAccount(CDOffering offering, double openBalance) {
-		CDAccount newA = new CDAccount(offering, openBalance);
-		CDAccount[] newCDArray = new CDAccount[cdAccountArray.length + 1];
-		for (int i = 0; i < newCDArray.length - 1; i++) {
-			newCDArray[i] = cdAccountArray[i];
+	public boolean addCheckingAccount(CheckingAccount checkingAccount) {
+		if (checkingAccount == null) {
+			return false;
 		}
-		cdAccountArray = newCDArray;
-		cdAccountArray[cdAccountArray.length - 1] = newA;
-		return newA;
+		checkingArray.add(checkingAccount);
+		checkingAccount.setAccountHolder(this.id);
+		return true;
 	}
 
-	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount)
-			throws ExceedsCombinedBalanceLimitException {
-		try {
-			if (checkingAccount.getBalance() + getCheckingBalance() + getSavingsBalance() >= 250000) {
-				System.out.println(
-						"Cannot open a new Checking Account because aggregate balance of accounts is to high.");
-				return null;
-			}
-			CheckingAccount[] newCheckingArray = new CheckingAccount[checkingArray.length + 1];
-			for (int i = 0; i < newCheckingArray.length - 1; i++) {
-				newCheckingArray[i] = checkingArray[i];
-			}
-			checkingArray = newCheckingArray;
-			checkingArray[checkingArray.length - 1] = checkingAccount;
-			return checkingAccount;
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			return null;
+	public boolean addSavingsAccount(SavingsAccount savingsAccount) {
+		if (savingsAccount == null) {
+			return false;
 		}
-	}
-
-	public CheckingAccount addCheckingAccount(double openBalance) throws ExceedsCombinedBalanceLimitException {
-		if (getCheckingBalance() + getSavingsBalance() + openBalance >= 250000) {
-			System.out.println("Cannot open a new Checking Account because aggregate balance of accounts is to high.");
-			return null;
-		}
-		CheckingAccount newA = new CheckingAccount(openBalance, CheckingAccount.INTEREST_RATE);
-		CheckingAccount[] newCheckingArray = new CheckingAccount[checkingArray.length + 1];
-		for (int i = 0; i < newCheckingArray.length - 1; i++) {
-			newCheckingArray[i] = checkingArray[i];
-		}
-		checkingArray = newCheckingArray;
-		checkingArray[checkingArray.length - 1] = newA;
-		return newA;
-	}
-
-	public SavingsAccount addSavingsAccount(double openBalance) throws ExceedsCombinedBalanceLimitException {
-		if (getCheckingBalance() + getSavingsBalance() + openBalance >= 250000) {
-			System.out.println("Cannot open a new Savings Account because aggregate balance of accounts is to high.");
-			return null;
-		}
-		SavingsAccount newA = new SavingsAccount(openBalance, SavingsAccount.INTEREST_RATE);
-		SavingsAccount[] newSavingsArray = new SavingsAccount[savingsArray.length + 1];
-		for (int i = 0; i < newSavingsArray.length - 1; i++) {
-			newSavingsArray[i] = savingsArray[i];
-		}
-		savingsArray = newSavingsArray;
-		savingsArray[savingsArray.length - 1] = newA;
-		return newA;
-	}
-
-	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) throws ExceedsCombinedBalanceLimitException {
-		if (savingsAccount.getBalance() + getCheckingBalance() + getSavingsBalance() >= 250000) {
-			System.out.println("Cannot open a new Savings Account because aggregate balance of accounts is to high.");
-			return null;
-		}
-		SavingsAccount[] newSavingsArray = new SavingsAccount[savingsArray.length + 1];
-		for (int i = 0; i < newSavingsArray.length - 1; i++) {
-			newSavingsArray[i] = savingsArray[i];
-		}
-		savingsArray = newSavingsArray;
-		savingsArray[savingsArray.length - 1] = savingsAccount;
-		return savingsAccount;
+		savingsArray.add(savingsAccount);
+		savingsAccount.setAccountHolder(this.id);
+		return true;
 	}
 
 	@Override
@@ -145,7 +93,7 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		}
 	}
 
-	public CDAccount[] getCDAccounts() {
+	public List<CDAccount> getCDAccounts() {
 		return cdAccountArray;
 	}
 
@@ -157,15 +105,14 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		return total;
 	}
 
-	public CheckingAccount[] getCheckingAccounts() {
+	public List<CheckingAccount> getCheckingAccounts() {
 		return checkingArray;
 	}
 
 	public double getCheckingBalance() {
 		double total = 0.0;
-		int i;
-		for (i = 0; i < checkingArray.length; i++) {
-			total += checkingArray[i].getBalance();
+		for (CheckingAccount balance : checkingArray) {
+			total += balance.getBalance();
 		}
 		return total;
 	}
@@ -191,18 +138,18 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	}
 
 	public int getNumberOfCDAccounts() {
-		return cdAccountArray.length;
+		return cdAccountArray.size();
 	}
 
 	public int getNumberOfCheckingAccounts() {
-		return checkingArray.length;
+		return checkingArray.size();
 	}
 
 	public int getNumberOfSavingsAccounts() {
-		return savingsArray.length;
+		return savingsArray.size();
 	}
 
-	public SavingsAccount[] getSavingsAccounts() {
+	public List<SavingsAccount> getSavingsAccounts() {
 		return savingsArray;
 	}
 

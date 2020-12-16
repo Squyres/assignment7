@@ -30,27 +30,6 @@ class MeritBank {
 		return AccountHoldersArray;
 	}
 
-	public static BankAccount getBankAccount(long accountId) {
-		for (int i = 0; i < AccountHoldersArray.length; i++) {
-			for (int j = 0; i < AccountHoldersArray[i].checkingArray.length; j++) {
-				if (AccountHoldersArray[i].checkingArray[j].accountNumber == accountId) {
-					return AccountHoldersArray[i].checkingArray[j];
-				}
-			}
-			for (int j = 0; i < AccountHoldersArray[i].savingsArray.length; j++) {
-				if (AccountHoldersArray[i].savingsArray[j].accountNumber == accountId) {
-					return AccountHoldersArray[i].savingsArray[j];
-				}
-			}
-			for (int j = 0; i < AccountHoldersArray[i].cdAccountArray.length; j++) {
-				if (AccountHoldersArray[i].cdAccountArray[j].accountNumber == accountId) {
-					return AccountHoldersArray[i].cdAccountArray[j];
-				}
-			}
-		}
-		return null;
-	}
-
 	public static CDOffering getBestCDOffering(double depositAmount) {
 		double best = 0.0;
 		CDOffering bestOffering = null;

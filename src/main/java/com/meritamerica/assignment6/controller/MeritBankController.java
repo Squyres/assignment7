@@ -1,11 +1,10 @@
 package com.meritamerica.assignment6.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,18 +21,31 @@ import com.meritamerica.assignment6.models.CDAccount;
 import com.meritamerica.assignment6.models.CDOffering;
 import com.meritamerica.assignment6.models.CheckingAccount;
 import com.meritamerica.assignment6.models.SavingsAccount;
+import com.meritamerica.assignment6.repositories.AccountHolderRepository;
+import com.meritamerica.assignment6.repositories.CDAccountRepository;
+import com.meritamerica.assignment6.repositories.CDOfferingRepository;
+import com.meritamerica.assignment6.repositories.CheckingAccountRepository;
+import com.meritamerica.assignment6.repositories.SavingsAccountRepository;
 
 @RestController
 public class MeritBankController {
 
-	List<AccountHolder> accountHolders = new ArrayList<AccountHolder>();
+	@Autowired
+	private AccountHolderRepository accountHolderRepository;
 
-	List<CDOffering> cdOfferings = new ArrayList<CDOffering>();
+	@Autowired
+	private CDAccountRepository cdAccountRepository;
+	@Autowired
+	private CDOfferingRepository cdOfferingRepository;
+	@Autowired
+	private CheckingAccountRepository checkingAccountRepository;
+	@Autowired
+	private SavingsAccountRepository savingsAccountRepository;
 
 	@PostMapping(value = "/AccountHolders")
 	@ResponseStatus(HttpStatus.CREATED)
 	public AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder newAct) {
-		accountHolders.add(newAct);
+		accountHolderRepository.save(newAct);
 		return newAct;
 	}
 
@@ -41,16 +53,16 @@ public class MeritBankController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public CDAccount addCDAccount(@PathVariable int id, @RequestBody @Valid CDAccount newAct)
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
-		AccountHolder act = getAccountHolderByID(id);
+		AccountHolder act = accountHolderRepository.findById(id);
 		act.addCDAccount(newAct);
-		newAct.addAccountHolder(act);
+		cdAccountRepository.save(newAct);
 		return newAct;
 	}
 
 	@PostMapping(value = "/CDOfferings")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CDOffering addCDOffering(@RequestBody @Valid CDOffering newOffer) {
-		cdOfferings.add(newOffer);
+		cdOfferingRepository.save(newOffer);
 		return newOffer;
 
 	}
@@ -60,12 +72,12 @@ public class MeritBankController {
 	public CheckingAccount addCheckingAccount(@PathVariable int id, @RequestBody @Valid CheckingAccount newAct)
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException,
 			AccountHolderNotFoundException {
-		AccountHolder act = getAccountHolderByID(id);
+		AccountHolder act = accountHolderRepository.findById(id);
 		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
 			throw new ExceedsCombinedBalanceLimitException();
 		}
 		act.addCheckingAccount(newAct);
-		newAct.addAccountHolder(act);
+		checkingAccountRepository.save(newAct);
 		return newAct;
 	}
 
@@ -73,61 +85,52 @@ public class MeritBankController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public SavingsAccount addSavingsAccount(@PathVariable int id, @RequestBody @Valid SavingsAccount newAct)
 			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
-		AccountHolder act = getAccountHolderByID(id);
+		AccountHolder act = accountHolderRepository.findById(id);
 		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
 			throw new ExceedsCombinedBalanceLimitException();
 		}
 		act.addSavingsAccount(newAct);
-		newAct.addAccountHolder(act);
+		savingsAccountRepository.save(newAct);
 		return newAct;
 	}
 
 	@GetMapping("/AccountHolders/{id}")
 	public AccountHolder getAccountHolderByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
-		AccountHolder actSearch = null;
-		for (AccountHolder ach : accountHolders) {
-			if (ach.getId() == id) {
-				actSearch = ach;
-			}
-		}
-		if (actSearch == null) {
-			throw new AccountHolderIdNotFoundException(id);
-		}
-		return actSearch;
+		return accountHolderRepository.findById(id);
 	}
 
 	@GetMapping("/AccountHolders")
 	public List<AccountHolder> getAccountHolders() {
-		return accountHolders;
+		return accountHolderRepository.findAll();
 	}
 
 	@GetMapping("/AccountHolders/{id}/CDAccounts")
 	public List<CDAccount> getCDAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
-		AccountHolder act = getAccountHolderByID(id);
-		return Arrays.asList(act.getCDAccounts());
+		AccountHolder act = accountHolderRepository.findById(id);
+		return cdAccountRepository.findByAccountHolder(act.getId());
 	}
 
 	@GetMapping("/CDOfferings")
 	List<CDOffering> getCDOfferings() {
-		return cdOfferings;
+		return cdOfferingRepository.findAll();
 	}
 
 	@GetMapping("/AccountHolders/{id}/CheckingAccounts")
 	public List<CheckingAccount> getCheckingAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
-		AccountHolder act = getAccountHolderByID(id);
+		AccountHolder act = accountHolderRepository.findById(id);
 		if (act == null) {
 			throw new AccountHolderIdNotFoundException(id);
 		}
-		return Arrays.asList(act.getCheckingAccounts());
+		return checkingAccountRepository.findByAccountHolder(act.getId());
 	}
 
 	@GetMapping("/AccountHolders/{id}/SavingsAccounts")
 	public List<SavingsAccount> getSavingsAccountsByID(@PathVariable int id) throws AccountHolderIdNotFoundException {
-		AccountHolder act = getAccountHolderByID(id);
+		AccountHolder act = accountHolderRepository.findById(id);
 		if (act == null) {
 			throw new AccountHolderIdNotFoundException(id);
 		}
-		return Arrays.asList(act.getSavingsAccounts());
+		return savingsAccountRepository.findByAccountHolder(act.getId());
 	}
 
 }

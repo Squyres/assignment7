@@ -3,25 +3,24 @@ package com.meritamerica.assignment6.models;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
 import com.meritamerica.assignment6.exceptions.ExceedsFraudSuspicionLimitException;
 
 @Entity
-@Table(name = "CDAccount")
 public class CDAccount extends BankAccount {
 
-	CDOffering offering;
 	@Min(value = 1)
 	private int term;
 	Date date;
 
 	@ManyToOne
-	@JoinColumn(name = "accountholder_id", nullable = false)
 	private AccountHolder ah;
+	private int accountHolder;
+
+	@ManyToOne
+	private CDOffering offering;
 
 	public CDAccount() {
 		this.balance = 0;
@@ -38,10 +37,6 @@ public class CDAccount extends BankAccount {
 		this.term = term;
 	}
 
-	public void addAccountHolder(AccountHolder ah) {
-		this.ah = ah;
-	}
-
 	@Override
 	public boolean deposit(double amount) throws ExceedsFraudSuspicionLimitException {
 		throw new ExceedsFraudSuspicionLimitException();
@@ -51,12 +46,20 @@ public class CDAccount extends BankAccount {
 		throw new ExceedsFraudSuspicionLimitException();
 	}
 
+	public int getAccountHolder() {
+		return this.accountHolder;
+	}
+
 	public Date getStartDate() {
 		return date;
 	}
 
 	public int getTerm() {
 		return this.term;
+	}
+
+	public void setAccountHolder(int actId) {
+		this.accountHolder = actId;
 	}
 
 	public void setTerm(int term) {

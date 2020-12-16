@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
@@ -13,18 +14,18 @@ import javax.validation.constraints.Min;
 import com.meritamerica.assignment6.exceptions.ExceedsFraudSuspicionLimitException;
 
 @MappedSuperclass
+@Table(name = "bankAccounts")
 public abstract class BankAccount {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private int accountNumber;
 	@Min(value = 0)
 	double balance;
 	@DecimalMin(value = "0.0", inclusive = false, message = "Interest rate must be > 0")
 	@DecimalMax(value = "1.0", inclusive = false, message = "Interest rate must be < 1")
 	double interestRate;
 	Date accountOpenedOn;
-	long accountNumber;
 
 	public BankAccount() {
 		this.balance = 0;
@@ -35,12 +36,10 @@ public abstract class BankAccount {
 		this.balance = balance;
 		this.interestRate = interestRate;
 		this.accountOpenedOn = new Date();
-		this.accountNumber = MeritBank.getNextAccountNumber();
 	}
 
 	BankAccount(double balance, double interestRate, Date accountOpenedOn) {
 		this.balance = balance;
-		this.accountNumber = MeritBank.getNextAccountNumber();
 		this.interestRate = interestRate;
 		this.accountOpenedOn = accountOpenedOn;
 	}
@@ -48,7 +47,6 @@ public abstract class BankAccount {
 	public BankAccount(long accountNumber, double balance, double interestRate, Date accountOpenedOn) {
 		this.balance = balance;
 		this.interestRate = interestRate;
-		this.accountNumber = accountNumber;
 		this.accountOpenedOn = accountOpenedOn;
 	}
 

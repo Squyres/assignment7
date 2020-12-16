@@ -3,19 +3,17 @@ package com.meritamerica.assignment6.models;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "CheckingAccount")
 public class CheckingAccount extends BankAccount {
 
 	public static final double INTEREST_RATE = 0.0001;
 
 	@ManyToOne
-	@JoinColumn(name = "accountholder_id", nullable = false)
 	private AccountHolder ah;
+
+	private int accountHolder;
 
 	public CheckingAccount() {
 		this.balance = 0;
@@ -30,10 +28,6 @@ public class CheckingAccount extends BankAccount {
 		super(accountNumber, openBalance, interestRate, accountOpenedOn);
 	}
 
-	public void addAccountHolder(AccountHolder ah) {
-		this.ah = ah;
-	}
-
 	@Override
 	public boolean deposit(double amount) {
 		if (amount > 0) {
@@ -43,6 +37,14 @@ public class CheckingAccount extends BankAccount {
 			return true;
 		}
 		return false;
+	}
+
+	public int getAccountHolder() {
+		return this.accountHolder;
+	}
+
+	public void setAccountHolder(int actId) {
+		this.accountHolder = actId;
 	}
 
 	@Override
