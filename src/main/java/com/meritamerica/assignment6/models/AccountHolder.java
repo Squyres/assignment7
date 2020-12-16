@@ -19,8 +19,6 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "accountholders")
 public class AccountHolder implements Comparable<AccountHolder> {
 
-	private static int nextId = 1;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "user_id")
