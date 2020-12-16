@@ -3,7 +3,7 @@ package com.hackerrank.sample;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.meritamerica.assignment5.Application;
+import com.meritamerica.assignment6.models.Application;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
