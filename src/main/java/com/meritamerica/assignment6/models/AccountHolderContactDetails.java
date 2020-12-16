@@ -1,10 +1,12 @@
 package com.meritamerica.assignment6.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +17,16 @@ public class AccountHolderContactDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private int id;
+	@OneToOne(cascade = CascadeType.ALL)
+	private AccountHolder accountHolder;
+
+	public AccountHolder getAccountHolder() {
+		return accountHolder;
+	}
+
+	public void setAccountHolder(AccountHolder accountHolder) {
+		this.accountHolder = accountHolder;
+	}
 
 	private String phoneNumber;
 
@@ -37,9 +49,11 @@ public class AccountHolderContactDetails {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}

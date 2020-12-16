@@ -17,10 +17,12 @@ import com.meritamerica.assignment6.exceptions.AccountHolderIdNotFoundException;
 import com.meritamerica.assignment6.exceptions.AccountHolderNotFoundException;
 import com.meritamerica.assignment6.exceptions.ExceedsCombinedBalanceLimitException;
 import com.meritamerica.assignment6.models.AccountHolder;
+import com.meritamerica.assignment6.models.AccountHolderContactDetails;
 import com.meritamerica.assignment6.models.CDAccount;
 import com.meritamerica.assignment6.models.CDOffering;
 import com.meritamerica.assignment6.models.CheckingAccount;
 import com.meritamerica.assignment6.models.SavingsAccount;
+import com.meritamerica.assignment6.repositories.AccountHolderContactDetailsRepository;
 import com.meritamerica.assignment6.repositories.AccountHolderRepository;
 import com.meritamerica.assignment6.repositories.CDAccountRepository;
 import com.meritamerica.assignment6.repositories.CDOfferingRepository;
@@ -32,7 +34,8 @@ public class MeritBankController {
 
 	@Autowired
 	private AccountHolderRepository accountHolderRepository;
-
+	@Autowired
+	private AccountHolderContactDetailsRepository accountHolderContactDetailsRepository;
 	@Autowired
 	private CDAccountRepository cdAccountRepository;
 	@Autowired
@@ -131,6 +134,25 @@ public class MeritBankController {
 			throw new AccountHolderIdNotFoundException(id);
 		}
 		return savingsAccountRepository.findByAccountHolder(act.getId());
+	}
+
+	@GetMapping(value = "/AccountHolders/{id}/ContactDetails")
+	public AccountHolderContactDetails getContactDetails(@PathVariable int id) throws AccountHolderIdNotFoundException {
+		AccountHolder act = accountHolderRepository.findById(id);
+		if (act == null) {
+			throw new AccountHolderIdNotFoundException(id);
+		}
+		return accountHolderContactDetailsRepository.findByAccountHolder(act.getId());
+	}
+
+	@PostMapping(value = "/AccountHolders/{id}/ContactDetails")
+	@ResponseStatus(HttpStatus.CREATED)
+	public AccountHolderContactDetails addContactDetails(@PathVariable int id,
+			@RequestBody AccountHolderContactDetails contactDetails) {
+		AccountHolder act = accountHolderRepository.findById(id);
+		act.setAccountHolderContactDetails(contactDetails);
+		accountHolderContactDetailsRepository.save(contactDetails);
+		return contactDetails;
 	}
 
 }

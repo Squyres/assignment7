@@ -1,5 +1,6 @@
 package com.meritamerica.assignment6.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -42,19 +43,9 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	List<CDAccount> cdAccountArray;
 
 	public AccountHolder() {
-		this.id = nextId++;
-		this.firstName = "";
-		this.middleName = "";
-		this.lastName = "";
-		this.ssn = "";
-	}
-
-	public AccountHolder(String first, String middle, String last, String ssn) {
-		this.id = nextId++;
-		this.firstName = first;
-		this.middleName = middle;
-		this.lastName = last;
-		this.ssn = ssn;
+		checkingArray = new ArrayList<CheckingAccount>();
+		savingsArray = new ArrayList<SavingsAccount>();
+		cdAccountArray = new ArrayList<CDAccount>();
 	}
 
 	public boolean addCDAccount(CDAccount cdAccount) {
@@ -189,6 +180,14 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	@Override
 	public String toString() {
 		return "Combined Balance for Account Holder" + this.getCombinedBalance();
+	}
+
+	public AccountHolderContactDetails getAccountHolderContactDetails() {
+		return accountHolderContactDetails;
+	}
+
+	public void setAccountHolderContactDetails(AccountHolderContactDetails accountHolderContactDetails) {
+		this.accountHolderContactDetails = accountHolderContactDetails;
 	}
 
 }
