@@ -1,24 +1,20 @@
 package com.meritamerica.assignment7;
 
-import javax.sql.DataSource;
-
-import org.aspectj.weaver.ast.And;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.meritamerica.assignment7.filters.JwtRequestFilter;
-import com.meritamerica.assignment7.services.MyUserDetailsService;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -26,16 +22,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private UserDetailsService myUserDetailsService;
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(myUserDetailsService);
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
-	}
 
 	@Override
 	@Bean
@@ -45,11 +31,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable().authorizeRequests().antMatchers("/authenticate/createUser").hasRole("ADMIN")
-				.antMatchers("/AccountHolders/**").hasRole("ADMIN").antMatchers("/Me/**").hasRole("USER")
-				.antMatchers("CDOfferings").hasRole("ADMIN").antMatchers("/authenticate").permitAll().anyRequest()
-				.authenticated().and().exceptionHandling().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		httpSecurity.csrf().disable().authorizeRequests().antMatchers("/AccountHolders/**").hasAuthority("admin")
+				.antMatchers("/Me/**").hasAuthority("accountholder").antMatchers(HttpMethod.POST, "/CDOfferings")
+				.hasAuthority("admin").antMatchers(HttpMethod.GET, "/CDOfferings")
+				.hasAnyAuthority("admin", "accountholder").antMatchers("/authenticate/createUser").hasAuthority("admin")
+				.antMatchers("/authenticate").permitAll().anyRequest().authenticated().and().exceptionHandling().and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+	}
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(myUserDetailsService);
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
 	}
 }
