@@ -51,7 +51,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.meritamerica.assignment6.Application;
+import com.meritamerica.assignment7.Application;
 
 import javafx.util.Pair;
 

@@ -1,10 +1,10 @@
-package com.meritamerica.assignment6.repositories;
+package com.meritamerica.assignment7.repositories;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.meritamerica.assignment6.models.CheckingAccount;
+import com.meritamerica.assignment7.models.CheckingAccount;
 
 public interface CheckingAccountRepository extends JpaRepository<CheckingAccount, Integer> {
 

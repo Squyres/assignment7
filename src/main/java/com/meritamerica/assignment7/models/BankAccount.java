@@ -1,4 +1,4 @@
-package com.meritamerica.assignment6.models;
+package com.meritamerica.assignment7.models;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 
-import com.meritamerica.assignment6.exceptions.ExceedsFraudSuspicionLimitException;
+import com.meritamerica.assignment7.exceptions.ExceedsFraudSuspicionLimitException;
 
 @MappedSuperclass
 @Table(name = "bankAccounts")

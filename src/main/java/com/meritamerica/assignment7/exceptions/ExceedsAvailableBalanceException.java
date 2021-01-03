@@ -1,4 +1,4 @@
-package com.meritamerica.assignment6.exceptions;
+package com.meritamerica.assignment7.exceptions;
 
 public class ExceedsAvailableBalanceException extends Exception {
 

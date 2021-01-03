@@ -1,4 +1,4 @@
-package com.meritamerica.assignment6.models;
+package com.meritamerica.assignment7.models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

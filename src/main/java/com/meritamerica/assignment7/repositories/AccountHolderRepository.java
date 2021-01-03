@@ -1,8 +1,8 @@
-package com.meritamerica.assignment6.repositories;
+package com.meritamerica.assignment7.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.meritamerica.assignment6.models.AccountHolder;
+import com.meritamerica.assignment7.models.AccountHolder;
 
 public interface AccountHolderRepository extends JpaRepository<AccountHolder, Integer> {
 	AccountHolder findById(int id);
