@@ -29,12 +29,14 @@ import com.meritamerica.assignment7.models.CDAccount;
 import com.meritamerica.assignment7.models.CDOffering;
 import com.meritamerica.assignment7.models.CheckingAccount;
 import com.meritamerica.assignment7.models.SavingsAccount;
+import com.meritamerica.assignment7.models.User;
 import com.meritamerica.assignment7.repositories.AccountHolderContactDetailsRepository;
 import com.meritamerica.assignment7.repositories.AccountHolderRepository;
 import com.meritamerica.assignment7.repositories.CDAccountRepository;
 import com.meritamerica.assignment7.repositories.CDOfferingRepository;
 import com.meritamerica.assignment7.repositories.CheckingAccountRepository;
 import com.meritamerica.assignment7.repositories.SavingsAccountRepository;
+import com.meritamerica.assignment7.repositories.UserRepository;
 import com.meritamerica.assignment7.services.JwtUtil;
 import com.meritamerica.assignment7.services.MyUserDetailsService;
 
@@ -53,14 +55,18 @@ public class MeritBankController {
 	private CheckingAccountRepository checkingAccountRepository;
 	@Autowired
 	private SavingsAccountRepository savingsAccountRepository;
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private JwtUtil jwtTokenUtil;
+	private UserRepository userRepository;
 
 	@Autowired
 	private MyUserDetailsService userDetailsService;
+
+	@Autowired
+	private JwtUtil jwtTokenUtil;
 
 	@PostMapping("/AccountHolders")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -140,6 +146,12 @@ public class MeritBankController {
 		final String jwt = jwtTokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new AuthenticationResponse(jwt));
+	}
+
+	@PostMapping("/authenticate/createUser")
+	public ResponseEntity<?> createUser(@RequestBody User user) {
+		userRepository.save(user);
+		return ResponseEntity.ok(user);
 	}
 
 	@GetMapping("/AccountHolders/{id}")
