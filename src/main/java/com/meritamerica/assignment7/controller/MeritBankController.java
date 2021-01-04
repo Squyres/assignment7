@@ -1,5 +1,6 @@
 package com.meritamerica.assignment7.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -10,11 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -201,5 +205,37 @@ public class MeritBankController {
 		}
 		return savingsAccountRepository.findByAccountHolder(act.getId());
 	}
+	
+	@GetMapping(value = "/Me")
+    public AccountHolder getMe(@RequestHeader (name = "Authorization")String token){
+        token = token.substring(7);
+        User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
+        return ah;
+    }
+	
+	@GetMapping(value = "/Me/CheckingAccounts")
+    public List<CheckingAccount> getMeCheckingAccounts(@RequestHeader (name = "Authorization")String token){
+        token = token.substring(7);
+        User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
+        return ah.getCheckingAccounts();
+    }
+	
+	@GetMapping(value = "/Me/SavingsAccounts")
+    public List<SavingsAccount> getMeSavingsAccounts(@RequestHeader (name = "Authorization")String token){
+        token = token.substring(7);
+        User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
+        return ah.getSavingsAccounts();
+    }
+	
+	@GetMapping(value = "/Me/CDAccounts")
+    public List<CDAccount> getMeCDAccounts(@RequestHeader (name = "Authorization")String token){
+        token = token.substring(7);
+        User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
+        return ah.getCDAccounts();
+    }
 
 }
