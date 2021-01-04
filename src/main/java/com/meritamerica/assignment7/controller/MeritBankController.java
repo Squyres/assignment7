@@ -206,36 +206,87 @@ public class MeritBankController {
 		return savingsAccountRepository.findByAccountHolder(act.getId());
 	}
 	
-	@GetMapping(value = "/Me")
-    public AccountHolder getMe(@RequestHeader (name = "Authorization")String token){
+	@GetMapping("/Me")
+    public AccountHolder getMyAccount(@RequestHeader (name = "Authorization")String token) throws AccountHolderNotFoundException{
         token = token.substring(7);
         User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
-        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
-        return ah;
+        AccountHolder act = accountHolderRepository.findById(user.getAccountHolder().getId());
+        if (act == null) {
+			throw new AccountHolderNotFoundException();
+		}
+        return act;
     }
 	
-	@GetMapping(value = "/Me/CheckingAccounts")
-    public List<CheckingAccount> getMeCheckingAccounts(@RequestHeader (name = "Authorization")String token){
+	@GetMapping("/Me/CheckingAccounts")
+    public List<CheckingAccount> getMyCheckingAccounts(@RequestHeader (name = "Authorization")String token) throws AccountHolderNotFoundException{
         token = token.substring(7);
         User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
-        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
-        return ah.getCheckingAccounts();
+        AccountHolder act = accountHolderRepository.findById(user.getAccountHolder().getId());
+        if (act == null) {
+			throw new AccountHolderNotFoundException();
+		}
+        return act.getCheckingAccounts();
+    }
+	@PostMapping("/Me/CheckingAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
+	public CheckingAccount addMyCheckingAccount(@RequestHeader (name = "Authorization")String token, @RequestBody @Valid CheckingAccount newAct) throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException,
+	AccountHolderNotFoundException {
+		token = token.substring(7);
+		User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+		AccountHolder act = accountHolderRepository.findById(user.getAccountHolder().getId());
+		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
+			throw new ExceedsCombinedBalanceLimitException();
+		}
+		act.addCheckingAccount(newAct);
+		checkingAccountRepository.save(newAct);
+		return newAct;
+	}
+	@PostMapping("/Me/SavingsAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
+	public SavingsAccount addMySavingsAccount(@RequestHeader (name = "Authorization")String token, @RequestBody @Valid SavingsAccount newAct) throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException,
+	AccountHolderNotFoundException {
+		token = token.substring(7);
+		User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+		AccountHolder act = accountHolderRepository.findById(user.getAccountHolder().getId());
+		if (newAct.getBalance() + act.getCombinedBalance() > 250000) {
+			throw new ExceedsCombinedBalanceLimitException();
+		}
+		act.addSavingsAccount(newAct);
+		savingsAccountRepository.save(newAct);
+		return newAct;
+	}
+	@PostMapping("/Me/CDAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
+	public CDAccount addMyCDAccount(@RequestHeader (name = "Authorization")String token, @RequestBody @Valid CDAccount newAct)
+			throws ExceedsCombinedBalanceLimitException, AccountHolderIdNotFoundException {
+		token = token.substring(7);
+		User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+		AccountHolder act = accountHolderRepository.findById(user.getAccountHolder().getId());
+		act.addCDAccount(newAct);
+		cdAccountRepository.save(newAct);
+		return newAct;
+	}
+	
+	@GetMapping("/Me/SavingsAccounts")
+    public List<SavingsAccount> getMySavingsAccounts(@RequestHeader (name = "Authorization")String token) throws AccountHolderNotFoundException{
+        token = token.substring(7);
+        User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
+        AccountHolder act = accountHolderRepository.findById(user.getAccountHolder().getId());
+        if (act == null) {
+			throw new AccountHolderNotFoundException();
+		}
+        return act.getSavingsAccounts();
     }
 	
-	@GetMapping(value = "/Me/SavingsAccounts")
-    public List<SavingsAccount> getMeSavingsAccounts(@RequestHeader (name = "Authorization")String token){
+	@GetMapping("/Me/CDAccounts")
+    public List<CDAccount> getMyCDAccounts(@RequestHeader (name = "Authorization")String token) throws AccountHolderNotFoundException{
         token = token.substring(7);
         User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
-        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
-        return ah.getSavingsAccounts();
-    }
-	
-	@GetMapping(value = "/Me/CDAccounts")
-    public List<CDAccount> getMeCDAccounts(@RequestHeader (name = "Authorization")String token){
-        token = token.substring(7);
-        User user = userRepository.findByUserName(jwtTokenUtil.extractUsername(token)).get();
-        AccountHolder ah = accountHolderRepository.findById(user.getAccountHolder().getId());   //.findOne(user.getAccountHolder().getId());
-        return ah.getCDAccounts();
+        AccountHolder act = accountHolderRepository.findById(user.getAccountHolder().getId());
+        if (act == null) {
+			throw new AccountHolderNotFoundException();
+		}
+        return act.getCDAccounts();
     }
 
 }
