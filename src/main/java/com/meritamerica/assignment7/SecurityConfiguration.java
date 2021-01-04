@@ -15,11 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.meritamerica.assignment7.filters.JwtRequestFilter;
+import com.meritamerica.assignment7.services.MyUserDetailsService;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
-	private UserDetailsService myUserDetailsService;
+	private MyUserDetailsService myUserDetailsService;
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
@@ -40,8 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(myUserDetailsService);
 	}
 
