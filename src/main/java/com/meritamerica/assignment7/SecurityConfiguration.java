@@ -32,12 +32,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable().authorizeRequests().antMatchers("/AccountHolders/**").hasAuthority("admin")
-				.antMatchers("/Me/**").hasAuthority("accountholder").antMatchers(HttpMethod.POST, "/CDOfferings")
-				.hasAuthority("admin").antMatchers(HttpMethod.GET, "/CDOfferings")
-				.hasAnyAuthority("admin", "accountholder").antMatchers("/authenticate/createUser").hasAuthority("admin")
-				.antMatchers("/authenticate").permitAll().anyRequest().authenticated().and().exceptionHandling().and()
+		/*
+		 //code to test data base by temporarily remove security
+		 
+		httpSecurity.csrf().disable().authorizeRequests()
+		.antMatchers("/**").permitAll().anyRequest()
+		.authenticated()
+		.and().exceptionHandling().and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		httpSecurity.headers().frameOptions().disable();
+		*/
+		httpSecurity.csrf().disable().authorizeRequests()
+			.antMatchers("/AccountHolders/**").hasAuthority("admin")
+			.antMatchers("/Me/**").hasAuthority("accountholder")
+			.antMatchers(HttpMethod.POST, "/CDOfferings")
+				.hasAuthority("admin")
+			.antMatchers(HttpMethod.GET, "/CDOfferings")
+				.hasAnyAuthority("admin", "accountholder")
+			.antMatchers("/authenticate/createUser").hasAuthority("admin")
+			.antMatchers("/authenticate").permitAll().anyRequest()
+			.authenticated()
+			.and().exceptionHandling().and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
