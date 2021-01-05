@@ -44,11 +44,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		*/
 		httpSecurity.csrf().disable().authorizeRequests()
 			.antMatchers("/AccountHolders/**").hasAuthority("admin")
-			.antMatchers("/Me/**","/Me").hasAuthority("accountholder")
+			.antMatchers("/Me/**","/Me").hasAuthority("AccountHolder")
 			.antMatchers(HttpMethod.POST, "/CDOfferings")
 				.hasAuthority("admin")
 			.antMatchers(HttpMethod.GET, "/CDOfferings")
-				.hasAnyAuthority("admin", "accountholder")
+				.hasAnyAuthority("admin", "AccountHolder")
 			.antMatchers("/authenticate/createUser").hasAuthority("admin")
 			.antMatchers("/authenticate","/authenticate/").permitAll().anyRequest()
 			.authenticated()
